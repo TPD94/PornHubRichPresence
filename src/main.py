@@ -130,9 +130,6 @@ def get_url_and_description():
             'url': info["og:url"]
         }
 
-with open("token.yaml", "r") as file:
-    data = yaml.safe_load(file)
-
-RPC = Presence(data['discord'])
+RPC = Presence(1478206867451805826)
 RPC.connect()
 launch_chrome_debug()
