@@ -1,5 +1,6 @@
 
 #### PornHubRichPresence - A Discord Rich Presence Client  
+![Rich Presence Example](https://i.imgur.com/FOTu43u.png)
   
 ## Quick Start  
 
