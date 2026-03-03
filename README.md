@@ -21,7 +21,7 @@
 
   
   ### Begin watching!  
-  A chrome debug window will open automatically to pornhub, just begin watching and your rich presence should now update with whatever video you choose to watch! Now your friends can get some inspiration too! When (your) finished browsing and watching simply close the wimdow and your rich presence will be cleared and the script will stop.  
+  A chrome debug window will open automatically to Pornhub, just begin watching and your rich presence should now update with whatever video you choose to watch! Now your friends can get some inspiration too! When (your) finished browsing and watching simply close the window and your rich presence will be cleared and the script will stop.  
   
   
 **KNOWN LIMITATIONS**  
