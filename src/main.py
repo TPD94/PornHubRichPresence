@@ -1,9 +1,83 @@
 import yaml
-import time
 from pypresence import Presence, ActivityType, StatusDisplayType
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import requests
+import os
+import sys
+import shutil
+import subprocess
+import time
+
+
+def find_chrome_path():
+    """Return full path to Chrome executable or None if not found."""
+
+    if sys.platform == "win32":
+        possible_paths = [
+            os.path.join(os.environ.get("PROGRAMFILES", ""), "Google\\Chrome\\Application\\chrome.exe"),
+            os.path.join(os.environ.get("PROGRAMFILES(X86)", ""), "Google\\Chrome\\Application\\chrome.exe"),
+            os.path.join(os.environ.get("LOCALAPPDATA", ""), "Google\\Chrome\\Application\\chrome.exe"),
+        ]
+        for path in possible_paths:
+            if os.path.exists(path):
+                return path
+
+    elif sys.platform == "darwin":  # macOS
+        mac_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        if os.path.exists(mac_path):
+            return mac_path
+
+    else:  # Linux
+        for name in ["google-chrome", "google-chrome-stable", "chromium", "chromium-browser"]:
+            path = shutil.which(name)
+            if path:
+                return path
+
+    return None
+
+def launch_chrome_debug():
+    chrome_path = find_chrome_path()
+
+    if not chrome_path:
+        sys.exit("Could not find Chrome")
+
+
+    if sys.platform == "win32":
+        user_data_dir = r"C:\chrome-debug"
+    elif sys.platform == "darwin":
+        user_data_dir = os.path.expanduser("~/chrome-debug")
+    else:
+        user_data_dir = os.path.expanduser("~/chrome-debug")
+
+    os.makedirs(user_data_dir, exist_ok=True)
+
+    command = [
+        chrome_path,
+        "--remote-debugging-port=6000",
+        f"--user-data-dir={user_data_dir}",
+        "https://pormhub.com/"
+    ]
+
+    process = subprocess.Popen(command)
+    while process.poll() is None:
+        video_info = get_url_and_description()
+        if video_info is None:
+            RPC.clear()
+        else:
+            RPC.update(
+                state="Gooning",
+                details=f"{video_info['title']}",
+                large_image="phlogo",
+                large_text="PornHub",
+                buttons=[
+                    {"label": "Watch", "url": f"{video_info['url']}"}
+                ],
+                activity_type=ActivityType.WATCHING,
+                status_display_type=StatusDisplayType.STATE,
+                name=f"{video_info['title']}"
+            )
+            time.sleep(15)
 
 def get_tabs():
     tab_response = requests.get(
@@ -61,22 +135,4 @@ with open("token.yaml", "r") as file:
 
 RPC = Presence(data['discord'])
 RPC.connect()
-
-while True:
-    video_info = get_url_and_description()
-    if video_info is None:
-        RPC.clear()
-    else:
-        RPC.update(
-            state="Gooning",
-            details=f"{video_info['title']}",
-            large_image="phlogo",
-            large_text="PornHub",
-            buttons=[
-                {"label": "Watch", "url": f"{video_info['url']}"}
-            ],
-            activity_type=ActivityType.WATCHING,
-            status_display_type=StatusDisplayType.STATE,
-            name=f"{video_info['title']}"
-        )
-    time.sleep(15)
+launch_chrome_debug()
