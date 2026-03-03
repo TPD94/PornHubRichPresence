@@ -78,6 +78,7 @@ def launch_chrome_debug():
                 name=f"{video_info['title']}"
             )
             time.sleep(15)
+    sys.exit()
 
 def get_tabs():
     tab_response = requests.get(
