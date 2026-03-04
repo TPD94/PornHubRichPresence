@@ -77,7 +77,7 @@ def launch_chrome_debug():
                 status_display_type=StatusDisplayType.STATE,
                 name=f"{video_info['title']}"
             )
-            time.sleep(15)
+        time.sleep(15)
     sys.exit()
 
 def get_tabs():
